@@ -52,3 +52,6 @@
     width: 100% !important;
     text-transform: capitalize !important
 }
+.olxProductsMain{
+    overflow-x: hidden !important;
+}

@@ -1,0 +1,26 @@
+.postAddMain{
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #F7F8F8;
+}
+.postAddSubMMain{
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 1rem;
+    background: white;
+}
+.postAddFields{
+    width: 500px;
+    border: 1px solid grey !important;
+    border-radius: 5px;
+    margin: 0.5rem !important;
+}
+.productImageStyle{
+    width: 200px;
+    height: 200px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+}

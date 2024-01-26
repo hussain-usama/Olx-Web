@@ -1,0 +1,30 @@
+.profileMain{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #F7F8F8;
+}
+.profileSubMain{
+    width: 1000px;
+    border: 1px solid #e7e3dc;
+    box-shadow: 1px 1px 1px 1px #e7e3dc;
+    border-radius: 4px;
+    padding: 1rem;
+    background: white;
+}
+.profileImageStyle{
+    width: 200px;
+    width: 100px;
+    height: 100px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+}
+.uploadButton{
+    width: 200px !important;
+    background-color: black !important;
+    color: white;
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+}
