@@ -2,10 +2,10 @@ import Avatar from '@mui/material/Avatar';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { useState } from 'react';
+import { useState , useEffect} from 'react';
 import { TextField } from '@mui/material';
 import './index.css'
-import { updateProfileToDb } from '../../config/firebase';
+import { updateProfileToDb,getProfileInfo } from '../../config/firebase';
 import { useNavigate } from 'react-router-dom';
 import Loader from '../../components/Loader';
 import { generateViewUrl } from '../../utils/helperFunctions';
@@ -22,16 +22,37 @@ export const VisuallyHiddenInput = styled('input')({
     width: 1,
 });
 
+let profileDocId=''
 function Profile({ user }) {
-    const [profileInfo, setProfileInfo] = useState({ email: user?.email ? user?.email : '', name: '', age: '', profileImage: '', info: '' })
+    const [profileInfo, setProfileInfo] = useState({ email: '', name: '', age: '', profileImage: '', info: '' })
     const [imageUrl,setImageUrl]=useState([])
     const [loading, setLoading] = useState(false)
+    const [statusResponse, setStatusResponse] = useState('add')
     const navigate=useNavigate()
+
+    useEffect(()=>{
+        getProfileInfoDb()
+    },[])
+
+    const getProfileInfoDb=async()=>{
+        setLoading(true)
+        let response =await getProfileInfo()
+        let filterUser= response?.find(x=>x?.data?.email===user?.email)
+        profileDocId=filterUser?.id
+        console.log(filterUser,'filterUser')
+        setLoading(false)
+        if(Object.keys(filterUser?.data)?.length){
+            let profileObj={ email: filterUser?.data?.email, name: filterUser?.data?.name, age: filterUser?.data?.age, profileImage: filterUser?.data?.imageUrl, info: filterUser?.data?.info }
+            setProfileInfo({...profileObj})
+            setStatusResponse('update')
+        }
+    }
     const handleChange = (e) => {
         let name = e.target.name
         let value
         if (name === 'profileImage') {
             value = e.target.files[0]
+            // to show image when it upload
             const getFiles = generateViewUrl(e)
             setImageUrl(getFiles)
         } else {
@@ -45,7 +66,7 @@ function Profile({ user }) {
 
     const saveProfile=async()=>{
         setLoading(true)
-        await updateProfileToDb(profileInfo)
+        await updateProfileToDb(profileInfo,statusResponse,profileDocId)
         setLoading(false)
         navigate('/')
     }
@@ -59,7 +80,10 @@ function Profile({ user }) {
                     {imageUrl?.length ?
                         <img  src={imageUrl.map(x=>x)} className='profileImageStyle'/>
                         :
-                        <Avatar alt={profileInfo?.email[0]} src="" />
+                        profileInfo?.profileImage ?
+                        <img  src={profileInfo?.profileImage} className='profileImageStyle'/>
+                        :
+                        <Avatar alt={profileInfo?.email} src="" />
                     }
                 </div>
                 <div style={{ display: 'flex',justifyContent:'center', margin:'1rem' }}>

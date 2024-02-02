@@ -1,9 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth , createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from "firebase/auth";
-import { collection, addDoc } from "firebase/firestore"; 
 import { getStorage, ref, uploadBytes, getDownloadURL  } from "firebase/storage";
-import { getFirestore, getDocs } from "firebase/firestore";
+import { getFirestore, getDocs,collection, addDoc, updateDoc,doc  } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAfcdqCKpIj3zyxxae4mo2fpQgX7DXnILk",
@@ -57,19 +56,30 @@ export const logoutUser=()=>{
 }
 
 /* Data Storage */
-export const updateProfileToDb=async(profileInfo)=>{
+export const updateProfileToDb=async(profileInfo, status, docId )=>{
   try {
     const { email, name, age, profileImage, info } = profileInfo
     const storageRef = ref(storage, `profile/${profileImage.name}`);
     await uploadBytes(storageRef, profileImage)
     let url = await getDownloadURL(storageRef)
-    await addDoc(collection(db, "userProfile"), {
-      email,
-      name,
-      age,
-      info,
-      imageUrl : url,
-    });
+    if(status==='add'){
+      await addDoc(collection(db, "userProfile"), {
+        email,
+        name,
+        age,
+        info,
+        imageUrl : url,
+      });
+    }else{
+      const updaDocRef = doc(db, "userProfile", docId);
+      await updateDoc(updaDocRef, {
+        email,
+        name,
+        age,
+        info,
+        imageUrl : url,
+      });
+    }
     alert('Profile Updated Successfully!')
   } catch (error) {
     alert(error.message)
@@ -83,12 +93,13 @@ export const addProductToDb=async(productInfo)=>{
     const storageRef = ref(storage, `ads/${adImage.name}`);
     await uploadBytes(storageRef, adImage)
     let url = await getDownloadURL(storageRef)
-    await addDoc(collection(db, "products"), {
-      title, 
-      descr, 
-      price,
-      imageUrl : url,
-    });
+      await addDoc(collection(db, "products"), {
+        title, 
+        descr, 
+        price,
+        imageUrl : url,
+      });
+    
     alert('Product Added Successfully!')
   } catch (error) {
     alert(error.message)
@@ -96,12 +107,19 @@ export const addProductToDb=async(productInfo)=>{
 }
 
 /* Get Stored Data */
+export const getProfileInfo=async()=>{
+  let querySnapshot = await getDocs(collection(db, "userProfile"));
+  let profileInfo=[]
+  querySnapshot.forEach((doc) => {
+    profileInfo.push({data:doc.data(), id: doc.id})
+  });
+  return profileInfo
+}
 
 export const getProducts=async()=>{
   let querySnapshot = await getDocs(collection(db, "products"));
   let products=[]
   querySnapshot.forEach((doc) => {
-    console.log(doc.id, " => ", doc.data());
     products.push(doc.data())
   });
   return products
