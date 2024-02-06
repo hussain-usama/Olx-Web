@@ -120,7 +120,7 @@ export const getProducts=async()=>{
   let querySnapshot = await getDocs(collection(db, "products"));
   let products=[]
   querySnapshot.forEach((doc) => {
-    products.push(doc.data())
+    products.push({data:doc.data(), id: doc.id})
   });
   return products
 }

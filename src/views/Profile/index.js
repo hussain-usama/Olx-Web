@@ -29,7 +29,7 @@ function Profile({ user }) {
     const [loading, setLoading] = useState(false)
     const [statusResponse, setStatusResponse] = useState('add')
     const navigate=useNavigate()
-
+    
     useEffect(()=>{
         getProfileInfoDb()
     },[])
@@ -37,6 +37,7 @@ function Profile({ user }) {
     const getProfileInfoDb=async()=>{
         setLoading(true)
         let response =await getProfileInfo()
+        console.log(response)
         let filterUser= response?.find(x=>x?.data?.email===user?.email)
         profileDocId=filterUser?.id
         console.log(filterUser,'filterUser')

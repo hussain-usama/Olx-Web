@@ -22,7 +22,9 @@ function Header() {
 
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true)
+  const [searchValue, setSearchValue] = useState('')
   const navigate=useNavigate()
+
   useEffect(() => {
       onAuthStateChanged(auth, (user) => {
           if (user) {
@@ -35,6 +37,11 @@ function Header() {
           setLoading(false)
         });
   }, []);
+
+  const handlSearch=(event)=>{
+    event.preventDefault();
+    navigate(`/searchProducts?name=${searchValue}`)
+  }
 
     return (
       <>
@@ -50,7 +57,13 @@ function Header() {
               sx={{ width: 300 }}
               renderInput={(params) => <TextField {...params} label="" />}
             />
-            <TextField id="outlined-basic" className='searchField' placeholder='Find Cars, Mobile Phones and more' label="" variant="outlined" />
+            <TextField
+              onChange={e=>setSearchValue(e.target.value)}
+              value={searchValue}
+              id="outlined-basic" className='searchField' 
+              placeholder='Find Cars, Mobile Phones and more' 
+              label="" variant="outlined" 
+            />
             {user?.email ? <HeaderMenu user={user}/> : <p className='loginText' onClick={()=>navigate('/login')}>login</p>}
             <img src={SellButton} style={{cursor:'pointer'}} onClick={()=>navigate('/addProduct')}/>
         </div>

@@ -3,11 +3,12 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { generateViewUrl } from '../../utils/helperFunctions';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { VisuallyHiddenInput } from '../Profile';
 import './index.css'
 import { addProductToDb } from '../../config/firebase';
 import Loader from '../../components/Loader';
+import Maps from '../../components/Maps';
 
 function AddProduct() {
 
@@ -46,6 +47,7 @@ function AddProduct() {
          <div className="postAddSubMMain">
        <h3>POST YOUR AD</h3>
        <div>
+      
         <TextField
             id="outlined-basic"
             placeholder=''
@@ -97,6 +99,10 @@ function AddProduct() {
               <Button component="label" style={{background:'white', color: 'black', border:'1px solid black', width:'250px'}} onClick={()=>navigate('/')}>
                   Cancel
               </Button>
+         
+          </div>
+          <div className='map-on-products'>
+             <Maps/>
           </div>
        </div>
     </div>

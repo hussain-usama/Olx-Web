@@ -1,5 +1,5 @@
 .postAddMain{
-    height: 100vh;
+    height: 100%;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -13,7 +13,7 @@
     background: white;
 }
 .postAddFields{
-    width: 500px;
+    width: 700px;
     border: 1px solid grey !important;
     border-radius: 5px;
     margin: 0.5rem !important;
@@ -23,4 +23,16 @@
     height: 200px;
     border: 1px solid transparent;
     border-radius: 5px;
+}
+.map-on-products{
+    width: 700px;
+    height: 400px;
+    padding: 1rem;
+}
+.map-autocomplete-field{
+    width: 700px;
+    height: 40px;
+    border: 1px solid grey !important;
+    border-radius: 5px;
+    margin-bottom: 0.5rem !important;
 }
