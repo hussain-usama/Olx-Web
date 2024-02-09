@@ -11,6 +11,7 @@ import Loader from "../components/Loader";
 import Profile from "../views/Profile";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
+import CartProducts from "../views/CartProducts";
 
 function BaseRoutes() {
 
@@ -44,6 +45,11 @@ function BaseRoutes() {
         <Route path={'/addProduct'} element={
           <PrivateRoutes>
             <AddProduct />
+          </PrivateRoutes>} />
+
+          <Route path={'/cartProdcuts'} element={
+          <PrivateRoutes>
+            <CartProducts />
           </PrivateRoutes>} />
 
           <Route path={'/profile'} element={

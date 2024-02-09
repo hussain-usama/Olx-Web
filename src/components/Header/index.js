@@ -9,6 +9,10 @@ import { auth } from '../../config/firebase';
 import HeaderMenu from '../Menu';
 import Loader from '../Loader';
 import { useNavigate } from 'react-router-dom';
+import IconButton from '@mui/material/IconButton';
+import Badge from '@mui/material/Badge';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import { useSelector } from 'react-redux';
 
 const dropdownList=[
   { label: 'Pakistan'},
@@ -24,7 +28,8 @@ function Header() {
   const [loading, setLoading] = useState(true)
   const [searchValue, setSearchValue] = useState('')
   const navigate=useNavigate()
-
+  const {cartList} = useSelector(state=> state.cartSlice)
+ 
   useEffect(() => {
       onAuthStateChanged(auth, (user) => {
           if (user) {
@@ -38,6 +43,9 @@ function Header() {
         });
   }, []);
 
+  const showCartItems=()=>{
+    navigate('/cartProdcuts')
+  }
   const handlSearch=(event)=>{
     event.preventDefault();
     navigate(`/searchProducts?name=${searchValue}`)
@@ -47,7 +55,7 @@ function Header() {
       <>
         {loading && <Loader open={loading}/>}
         <div className="headerMain" >
-            <img src={Logo}/>
+            <img src={Logo} onClick={()=>navigate('/')}/>
             <Autocomplete
               disablePortal
               id="combo-box-demo"
@@ -65,6 +73,11 @@ function Header() {
               label="" variant="outlined" 
             />
             {user?.email ? <HeaderMenu user={user}/> : <p className='loginText' onClick={()=>navigate('/login')}>login</p>}
+            <IconButton onClick={showCartItems}>
+            <Badge badgeContent={cartList?.length} color="secondary">
+              <ShoppingCartOutlinedIcon />
+            </Badge>
+          </IconButton>
             <img src={SellButton} style={{cursor:'pointer'}} onClick={()=>navigate('/addProduct')}/>
         </div>
       </>
